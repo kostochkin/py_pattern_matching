@@ -63,9 +63,15 @@ def test_case_class():
     class A:
 
         result = True
+        a = 5
 
         @def_match(Var('self'), 1, 2, 3)
         def fn(self):
             return self.result
 
-    assert A().fn(1, 2, 3)
+        @def_match(Var('self'), Var('x'))
+        def fn(self, x):
+            return self.a + x
+
+    assert A().fn(1, 2, 3) is True
+    assert A().fn(10) == 15
