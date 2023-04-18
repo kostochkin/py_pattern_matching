@@ -3,7 +3,7 @@ import pytest
 import pattern_matching.patterns
 
 from pattern_matching.cases import def_match, Cases
-from pattern_matching.patterns import Var
+from pattern_matching.patterns import Var, Any
 
 
 pattern_matching.patterns.do_log = True
@@ -38,11 +38,11 @@ def test_deep_decompose():
 
 def test_list_decompose():
 
-    @def_match([1, 2, [Var('x')], {'a': (False, Var('y'))}])
-    def fn(x, y):
-        return x + y
+    @def_match([Any(), Var('x'), Any(), ..., Var('xs')])
+    def fn(x, xs):
+        return [x] + xs
 
-    assert fn([1, 2, ['tr'], {'a': (False, 'ue!')}]) == 'true!'
+    assert fn([1, 2, 3, 4, 5]) == [2, 4, 5]
 
 
 def test_select_case():
