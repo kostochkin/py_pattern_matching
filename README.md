@@ -1,3 +1,5 @@
+![tests](https://github.com/kostochkin/py_pattern_matching/actions/workflows/python-app.yml/badge.svg)
+
 # py_pattern_matching
 Erlang-style pattern matching. Little experiment.
 
