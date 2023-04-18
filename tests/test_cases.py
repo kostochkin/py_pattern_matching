@@ -36,7 +36,7 @@ def test_deep_decompose():
     assert fn([1, 2, ['tr'], {'a': (False, 'ue!')}]) == 'true!'
 
 
-def list_decompose():
+def test_list_decompose():
 
     @def_match([1, 2, [Var('x')], {'a': (False, Var('y'))}])
     def fn(x, y):
