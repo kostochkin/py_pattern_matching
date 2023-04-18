@@ -251,7 +251,7 @@ class Dup(List):
 
     @logged('Match dup')
     def __call__(self, obj):
-        return super().__call__([obj]*len(self._pattern))
+        return super().__call__([obj] * len(self._pattern))
 
 
 def to_pattern(obj):

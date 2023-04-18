@@ -1,8 +1,9 @@
 import pytest
 
 import pattern_matching.patterns
+
 from pattern_matching.cases import def_match, Cases
-from pattern_matching.patterns import Var, Any
+from pattern_matching.patterns import Var
 
 
 pattern_matching.patterns.do_log = True
@@ -35,6 +36,15 @@ def test_deep_decompose():
     assert fn([1, 2, ['tr'], {'a': (False, 'ue!')}]) == 'true!'
 
 
+def list_decompose():
+
+    @def_match([1, 2, [Var('x')], {'a': (False, Var('y'))}])
+    def fn(x, y):
+        return x + y
+
+    assert fn([1, 2, ['tr'], {'a': (False, 'ue!')}]) == 'true!'
+
+
 def test_select_case():
 
     @def_match(True)
@@ -42,7 +52,7 @@ def test_select_case():
         return 'a'
 
     @def_match(False)
-    def fn():
+    def fn():  # noqa: F811
         return 'b'
 
     assert fn(True) == 'a'
@@ -70,7 +80,7 @@ def test_case_class():
             return self.result
 
         @def_match(Var('self'), Var('x'))
-        def fn(self, x):
+        def fn(self, x):  # noqa: F811
             return self.a + x
 
     assert A().fn(1, 2, 3) is True
