@@ -3,4 +3,4 @@
 # py_pattern_matching
 Erlang-style pattern matching. Little experiment.
 
-Please refer to [tests](tests/test_cases.py) to see the examples
+Please refer to [the tests](tests/test_cases.py) to see the examples
