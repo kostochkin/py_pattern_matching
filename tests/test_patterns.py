@@ -9,6 +9,7 @@ from pattern_matching.patterns import (
     Dup,
     Arg,
     Args,
+    Tuple,
 )
 
 
@@ -106,6 +107,17 @@ def test_dup_match(pattern, given, matched):
     matched_args = Dup(*pattern)(given)
     all_matched = all([x.matched for x in matched_args])
     assert all_matched is matched
+
+
+@pytest.mark.parametrize('pattern,given,matched', [
+    ((Val(1), Val(2), Val(3)), (1, 2, 3), True),
+    ((Val(1), Val(2), Val(3)), (1, 2), False),
+    ((Val(1), Val(2)), (1, 2, 3), False),
+    ((Var('x'), Val(2), Val(3)), (1, 2, 3), True),
+])
+def test_tuple_match(pattern, given, matched):
+    result = Tuple(*pattern)(given)
+    assert result[0].matched is matched
 
 
 # End

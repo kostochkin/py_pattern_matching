@@ -121,7 +121,7 @@ class Value(Pattern):
 class List(Pattern):
 
     def __init__(self, *pattern):
-        self._pattern = pattern
+        super().__init__(pattern)
         self._heads = []
         self._tail = None
         self._decompose_pattern()
@@ -171,11 +171,14 @@ class List(Pattern):
 
 class Tuple(Pattern):
 
+    def __init__(self, *pattern):
+        super().__init__(pattern)
+
     def __call__(self, obj) -> t.Tuple:
         if not isinstance(obj, tuple) or len(obj) != len(self._pattern):
             return [MatchResult(False, self, obj)]
 
-        return self._match_tuple(obj)
+        return [MatchResult(True, self, obj)] + self._match_tuple(obj)
 
     def _match_tuple(self, _tuple):
         return [
@@ -262,7 +265,7 @@ def to_pattern(obj):
     if isinstance(obj, list):
         return List(*map(to_pattern, obj))
     if isinstance(obj, tuple):
-        return Tuple(tuple(map(to_pattern, obj)))
+        return Tuple(*(map(to_pattern, obj)))
     if isinstance(obj, dict):
         return Dict(**{k: to_pattern(v) for k, v in obj.items()})
     return Value(obj)
