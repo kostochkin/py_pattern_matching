@@ -257,6 +257,25 @@ class Dup(List):
         return super().__call__([obj] * len(self._pattern))
 
 
+class Obj(Dict):
+
+    def __init__(self, obj_cls, **field_map):
+        super().__init__(**field_map)
+        self._obj_cls = obj_cls
+
+    def __call__(self, obj):
+        if not isinstance(obj, self._obj_cls):
+            return [MatchResult(False, self, obj)]
+
+        return self._match_obj_as_dict(obj)
+
+    def _match_obj_as_dict(self, obj):
+        obj_dict = {k: getattr(obj, k) for k in self._pattern}
+        result = super().__call__(obj_dict)
+        matched = result[0].matched
+        return [MatchResult(matched, self, obj)] + result[1:]
+
+
 def to_pattern(obj):
     if obj is Ellipsis:
         return Ellipsis
