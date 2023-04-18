@@ -33,4 +33,4 @@ jobs:
         flake8 . --count --select=E,W,F --show-source --statistics --max-line-length=80
     - name: Test with pytest
       run: |
-        pytest
+        pytest --showlocals
