@@ -10,6 +10,7 @@ from pattern_matching.patterns import (
     Arg,
     Args,
     Tuple,
+    Obj,
 )
 
 
@@ -118,6 +119,47 @@ def test_dup_match(pattern, given, matched):
 def test_tuple_match(pattern, given, matched):
     result = Tuple(*pattern)(given)
     assert result[0].matched is matched
+
+
+@pytest.mark.parametrize('x,y,z,matched', [
+    (1, 2, 3, True),
+    (1, 5, 3, False),
+])
+def test_obj_match(x, y, z, matched):
+    class Foo:
+        x = 1
+        y = 2
+        z = 3
+
+    obj = Foo()
+    pattern = Obj(Foo, x=Val(x), y=Val(y), z=Val(z))
+    assert pattern(obj)[0].matched is True
+
+
+@pytest.mark.parametrize('x,y,matched', [
+    (1, 2, True),
+    (1, 5, False),
+])
+def test_obj_partial_match(x, y, matched):
+    class Foo:
+        x = 1
+        y = 2
+        z = 3
+
+    obj = Foo()
+    pattern = Obj(Foo, x=Val(x), y=Val(y))
+    assert pattern(obj)[0].matched is True
+
+
+def test_obj_var_match():
+    class Foo:
+        x = 1
+        y = 2
+        z = 3
+
+    obj = Foo()
+    pattern = Arg(Obj(Foo, x=Val(1), y=Var('z')))
+    assert pattern(obj)[0].value.lookup('z') == 2
 
 
 # End
