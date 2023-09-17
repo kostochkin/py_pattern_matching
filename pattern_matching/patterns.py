@@ -279,6 +279,10 @@ class Obj(Dict):
 def to_pattern(obj):
     if obj is Ellipsis:
         return Ellipsis
+    if isinstance(obj, Obj):
+        return Obj(obj._obj_cls, **{k: to_pattern(v) for k, v in obj._pattern.items()})
+    if isinstance(obj, List):
+        return obj.__class__(*map(to_pattern, obj._pattern))
     if isinstance(obj, Pattern):
         return obj
     if isinstance(obj, list):
@@ -287,6 +291,7 @@ def to_pattern(obj):
         return Tuple(*(map(to_pattern, obj)))
     if isinstance(obj, dict):
         return Dict(**{k: to_pattern(v) for k, v in obj.items()})
+
     return Value(obj)
 
 
