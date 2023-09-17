@@ -45,6 +45,15 @@ def test_list_decompose():
     assert fn([1, 2, 3, 4, 5]) == [2, 4, 5]
 
 
+def test_list_empty_tail_decompose():
+
+    @def_match([Any(), ..., Var('xs')])
+    def fn(xs):
+        return xs
+
+    assert fn([1]) == []
+
+
 def test_select_case():
 
     @def_match(True)
