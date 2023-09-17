@@ -42,6 +42,7 @@ def test_value_match(expected, given, matched):
     ([Val(1), ...], [1], True),
     ([Val(1), ...], [1, 2], True),
     ([Val(1), ..., Var('b')], [1, 2, 3], True),
+    ([Val(1), ..., Var('b')], [1], True),
 ])
 def test_list_match(pattern, given, matched):
     matched_result = List(*pattern)(given)
