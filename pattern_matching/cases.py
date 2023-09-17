@@ -13,7 +13,7 @@ class Cases:
     def append(self, name: str, fn: callable, pattern: Arg):
         default = Args(Pattern())
         cases = self.cases.setdefault(name, [(self._default(name), default)])
-        cases.insert(0, (fn, pattern))
+        cases.insert(-1, (fn, pattern))
 
     def select(self, name, combined_arg) -> t.Tuple[callable, dict]:
         for fn, pattern in self.cases[name]:
