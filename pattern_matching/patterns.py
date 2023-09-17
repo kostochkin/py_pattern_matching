@@ -280,7 +280,8 @@ def to_pattern(obj):
     if obj is Ellipsis:
         return Ellipsis
     if isinstance(obj, Obj):
-        return Obj(obj._obj_cls, **{k: to_pattern(v) for k, v in obj._pattern.items()})
+        pattern = {k: to_pattern(v) for k, v in obj._pattern.items()}
+        return Obj(obj._obj_cls, **pattern)
     if isinstance(obj, List):
         return obj.__class__(*map(to_pattern, obj._pattern))
     if isinstance(obj, Pattern):
